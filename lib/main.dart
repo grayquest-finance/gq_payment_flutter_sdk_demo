@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gq_payment_flutter_sdk/gq_payment_flutter_sdk.dart';
 
@@ -56,51 +59,115 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   final GQPaymentSDK gqPaymentSDK = GQPaymentSDK();
+
+  final TextEditingController _clientIDController = TextEditingController();
+  final TextEditingController _secretKeyController = TextEditingController();
+  final TextEditingController _apiKeyController = TextEditingController();
+  final TextEditingController _environmentController = TextEditingController();
+  final TextEditingController _studentIDController = TextEditingController();
+  final TextEditingController _customerNumberController =
+      TextEditingController();
+  final TextEditingController _ppConfigController = TextEditingController();
+  final TextEditingController _feeHeaderController = TextEditingController();
+  final TextEditingController _prefillObjController = TextEditingController();
+
+  Map<String, dynamic> prefill = {};
+
+  String clientID = '';
+  String secretKey = '';
+  String apiKey = '';
+  String environment = '';
+  String studentID = '';
+  String customerNumber = '';
+  String ppConfig = '';
+  String feeHeader = '';
+  String prefillObj = '';
 
   @override
   Widget build(BuildContext context) {
+    Map<String, dynamic>? getConfig() {
+      try {
+        Map<String, dynamic> auth = {
+          "client_id": clientID,
+          "client_secret_key": secretKey,
+          "gq_api_key": apiKey
+        };
 
-    Map<String, dynamic> auth = {
-      "client_id": "<KEY>",
-      "client_secret_key": "<KEY>",
-      "gq_api_key": "<KEY>"
-    };
+        // Map<String, dynamic> auth = {
+        //   // "client_id": "<KEY>",
+        //   // "client_secret_key": "<KEY>",
+        //   // "gq_api_key": "<KEY>"
+        //
+        // // "client_id": "<KEY>",
+        // //   "client_secret_key": "<KEY>",
+        // //   "gq_api_key": "<KEY>"
+        // };
 
-    Map<String, dynamic> customization = {
-      "fee_helper_text": "fee_helper_text",
-      "logo_url": "logo_url",
-      "theme_color": "252525"
-    };
+        Map<String, dynamic> customization = {
+          "fee_helper_text": "fee_helper_text",
+          "logo_url": "logo_url",
+          "theme_color": "252525"
+        };
 
-    Map<String, dynamic> pp_config = {
-      "slug": "slug",
-    };
+        Map<String, dynamic> pp_config = json.decode(ppConfig);
 
-    Map<String, dynamic> fee_headers = {"payable_0": 100};
+        // Map<String, dynamic> pp_config = {
+        //   "slug": "arjun-gile",
+        //   // "slug": "mahalakshmi",
+        //   // "slug": "kl-vijaywada",
+        // };
 
-    Map<String, dynamic> config = {
-      "auth": auth,
-      "student_id": "demo_123457",
-      "customer_number": "8423560119",
-      "env": "test",
-      // "customization": customization,
-      // "pp_config": pp_config,
-      // "fee_headers": fee_headers
-    };
+        Map<String, dynamic> fee_headers = json.decode(feeHeader);
 
-    Map<String, dynamic> prefill = {};
+        // Map<String, dynamic> fee_headers = {
+        //   "Payable_fee_EMI": 150000,
+        //   "Payable_fee_Auto_Debit": 100,
+        //   "Payable_fee_PG": 10.00
+        // };
+
+        Map<String, dynamic> configObj = {
+          "auth": auth,
+          "student_id": studentID,
+          if (customerNumber.isNotEmpty) "customer_number": customerNumber,
+          "env": environment,
+          "customization": customization,
+          "pp_config": pp_config,
+          "fee_headers": fee_headers
+        };
+
+        Map<String, dynamic> student_details = {
+          "student_first_name": "First Name",
+          "student_last_name": "Last Name"
+        };
+
+        Map<String, dynamic> customer_details = {
+          "customer_email": "test@gmail.com"
+        };
+
+        Map<String, dynamic> prefill = {
+          "student_details": student_details,
+          "customer_details": customer_details
+        };
+
+        return configObj;
+      } catch (e) {
+        print('Error decoding JSON: $e');
+      }
+
+      return null;
+    }
 
     gqPaymentSDK.initiate(context, onSuccess: (data) {
-      // Handle data received from WebView
-      print('Received Success data in APP: $data');
+      print('Success data: $data');
+      showPopupDialog(context, data.toString());
     }, onFailed: (data) {
-      print('Received Success data in APP: $data');
+      print('Failed data: $data');
+      showPopupDialog(context, data.toString());
     }, onCancel: (data) {
-      print('Received Success data in APP: $data');
+      print('Cancel data: $data');
+      showPopupDialog(context, data.toString());
     });
-
 
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -110,50 +177,556 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(10.0),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(elevation: 2),
-              onPressed: () {
-                gqPaymentSDK.checkout(context, config, prefill);
+          children: [
+            TextField(
+              controller: _clientIDController,
+              decoration: const InputDecoration(labelText: 'Client ID *'),
+              onChanged: (value) {
+                setState(() {
+                  clientID = value;
+                });
               },
-              child: const Text('Masira Darvesh - UAT Environment'),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(elevation: 2),
-              onPressed: () {
-
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _secretKeyController,
+              decoration:
+                  const InputDecoration(labelText: 'Client Secret Key *'),
+              onChanged: (value) {
+                setState(() {
+                  secretKey = value;
+                });
               },
-              child: const Text('Enter Manually'),
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _apiKeyController,
+              decoration: const InputDecoration(labelText: 'GQ API Key *'),
+              onChanged: (value) {
+                setState(() {
+                  apiKey = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Select Environment *',
+              textAlign: TextAlign.left,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: RadioListTile(
+                    value: 'test',
+                    groupValue: environment,
+                    onChanged: (value) {
+                      setState(() {
+                        environment = value!;
+                      });
+                    },
+                    title: const Text('UAT'),
+                  ),
+                ),
+                Expanded(
+                  child: RadioListTile(
+                    value: 'staging',
+                    groupValue: environment,
+                    onChanged: (value) {
+                      setState(() {
+                        environment = value!;
+                      });
+                    },
+                    title: const Text('Stage'),
+                  ),
+                ),
+              ],
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Expanded(
+                child: RadioListTile(
+                  value: 'preprod',
+                  groupValue: environment,
+                  onChanged: (value) {
+                    setState(() {
+                      environment = value!;
+                    });
+                  },
+                  title: const Text('Pre-Prod'),
+                ),
+              ),
+              Expanded(
+                child: RadioListTile(
+                  value: 'live',
+                  groupValue: environment,
+                  onChanged: (value) {
+                    setState(() {
+                      environment = value!;
+                    });
+                  },
+                  title: const Text('Live'),
+                ),
+              ),
+            ]),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _studentIDController,
+              decoration: const InputDecoration(labelText: 'Student ID *'),
+              onChanged: (value) {
+                setState(() {
+                  studentID = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _customerNumberController,
+              decoration:
+                  const InputDecoration(labelText: 'Customer Mobile Number'),
+              onChanged: (value) {
+                setState(() {
+                  customerNumber = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _ppConfigController,
+              decoration: const InputDecoration(
+                  labelText: 'Payment Pages Configuration'),
+              onChanged: (value) {
+                setState(() {
+                  ppConfig = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _feeHeaderController,
+              decoration: const InputDecoration(labelText: 'Fee Headers'),
+              onChanged: (value) {
+                setState(() {
+                  feeHeader = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextField(
+              controller: _prefillObjController,
+              decoration: const InputDecoration(labelText: 'Prefill Object'),
+              onChanged: (value) {
+                setState(() {
+                  prefillObj = value;
+                });
+              },
+            ),
+            // Align(
+            //   alignment: Alignment.centerRight,
+            //   child: GestureDetector(
+            //     onTap: () {
+            //       print("PrefillJSONExample: ${prefillJSONExample()}");
+            //      samplePrefillBox();
+            //     },
+            //     child: new Text("Sample Example"),
+            //   ),
+            // ),
+            const SizedBox(height: 16.0),
+            Row(
+              children: [
+                const SizedBox(
+                  width: 16.0,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(elevation: 2),
+                    onPressed: () {
+                      print("ClientId: $clientID");
+                      print("SecretKey: $secretKey");
+                      print("ApiKey: $apiKey");
+                      print("Environment: $environment");
+                      print("StudentId: $studentID");
+                      print("CustomerNumber: $customerNumber");
+                      print("PpConfig: $ppConfig");
+                      print("FeeHeader: $feeHeader");
+                      print("PrefillObj: $prefillObj");
+                      print("ConfigObject: ${getConfig()}");
+                      if (prefillObj.isNotEmpty) {
+                        prefill = json.decode(prefillObj);
+                      }
+                      // Map<String, dynamic> prefillObject = json.decode(prefillObj);
+                      print("PrefillObjectSend: $prefill");
+                      gqPaymentSDK.checkout(context, getConfig(),
+                          prefill); // Open GrayQuest SDK and pass config and prefill data
+                    },
+                    child: const Text('Open GQ SDK'),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16.0,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(elevation: 2),
+                    onPressed: () {
+                      customDialog();
+                      // _clientIDController.text =
+                      //     "<KEY>";
+                      // clientID = _clientIDController.text;
+                      // _secretKeyController.text =
+                      //     "<KEY>";
+                      // secretKey = _secretKeyController.text;
+                      // _apiKeyController.text =
+                      //     "<KEY>";
+                      // apiKey = _apiKeyController.text;
+                      // // environment = "test";
+                      // _studentIDController.text = "demo_123456";
+                      // studentID = _studentIDController.text;
+                      // _customerNumberController.text = "8425960119";
+                      // customerNumber = _customerNumberController.text;
+                      // _ppConfigController.text =
+                      //     "{\"slug\":\"masira-darvesh-ayc-two\"}";
+                      // ppConfig = _ppConfigController.text;
+                      // _feeHeaderController.text =
+                      //     "{\"Payable_fee_EMI\":15000, \"Payable_fee_Auto_Debit\":1000, \"Payable_fee_PG\":100}";
+                      // feeHeader = _feeHeaderController.text;
+                    },
+                    child: const Text('Prefill'),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16.0,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 16.0,
             ),
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void samplePrefillBox(){
+    Dialog errorDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(padding: const EdgeInsets.all(10.0),
+              child: Container(
+                width: 300,
+                child: Center(
+                  child: Text(prefillJSONExample()),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(onPressed: (){
+                  _prefillObjController.text =
+                  prefillJSONExample();
+                  prefillObj = _prefillObjController.text;
+                  Navigator.of(context).pop();
+                }, child: Text("Apply"))
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context, builder: (BuildContext context) => errorDialog);
+  }
+
+  void customDialog() {
+    Dialog errorDialog = Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      //this right here
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                      child: Text(
+                    "masira-darvesh-gile || UAT",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal),
+                  )),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _clientIDController.text =
+                            "<KEY>";
+                        clientID = _clientIDController.text;
+                        _secretKeyController.text =
+                            "<KEY>";
+                        secretKey = _secretKeyController.text;
+                        _apiKeyController.text =
+                            "<KEY>";
+                        apiKey = _apiKeyController.text;
+                        // environment = "test";
+                        _ppConfigController.text =
+                            "{\"slug\":\"masira-darvesh-gile\"}";
+                        ppConfig = _ppConfigController.text;
+                        _feeHeaderController.text =
+                            "{\"Payable_fee_EMI\":15000, \"Payable_fee_Auto_Debit\":1000, \"Payable_fee_PG\":100}";
+                        feeHeader = _feeHeaderController.text;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: Divider(
+                color: Colors.black26,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                      child: Text(
+                    "masira-d || STAGING",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal),
+                  )),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _clientIDController.text =
+                            "<KEY>";
+                        clientID = _clientIDController.text;
+                        _secretKeyController.text =
+                            "<KEY>";
+                        secretKey = _secretKeyController.text;
+                        _apiKeyController.text =
+                            "<KEY>";
+                        apiKey = _apiKeyController.text;
+                        // environment = "test";
+                        _ppConfigController.text = "{\"slug\":\"masira-d\"}";
+                        ppConfig = _ppConfigController.text;
+                        _feeHeaderController.text =
+                            "{\"Payable_fee_EMI\":15000, \"Payable_fee_Auto_Debit\":1000, \"Payable_fee_PG\":100}";
+                        feeHeader = _feeHeaderController.text;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: Divider(
+                color: Colors.black26,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                      child: Text(
+                    "masira-darvesh-ayc-two || UAT || UNIPG",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal),
+                  )),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _clientIDController.text =
+                            "<KEY>";
+                        clientID = _clientIDController.text;
+                        _secretKeyController.text =
+                            "<KEY>";
+                        secretKey = _secretKeyController.text;
+                        _apiKeyController.text =
+                            "<KEY>";
+                        apiKey = _apiKeyController.text;
+                        // environment = "test";
+                        _ppConfigController.text =
+                            "{\"slug\":\"masira-darvesh-ayc-two\"}";
+                        ppConfig = _ppConfigController.text;
+                        _feeHeaderController.text =
+                            "{\"Payable_fee_EMI\":15000, \"Payable_fee_Auto_Debit\":1000, \"Payable_fee_PG\":100}";
+                        feeHeader = _feeHeaderController.text;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: Divider(
+                color: Colors.black26,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  const Expanded(
+                      child: Text(
+                    "masira-darvesh-chinchwad || PROD",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal),
+                  )),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _clientIDController.text =
+                            "<KEY>";
+                        clientID = _clientIDController.text;
+                        _secretKeyController.text =
+                            "<KEY>";
+                        secretKey = _secretKeyController.text;
+                        _apiKeyController.text =
+                            "<KEY>";
+                        apiKey = _apiKeyController.text;
+                        // environment = "test";
+                        _ppConfigController.text =
+                            "{\"slug\":\"masira-darvesh-chinchwad\"}";
+                        ppConfig = _ppConfigController.text;
+                        _feeHeaderController.text =
+                            "{\"Payable_fee_EMI\":15000, \"Payable_fee_Auto_Debit\":1000, \"Payable_fee_PG\":100}";
+                        feeHeader = _feeHeaderController.text;
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Apply'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context, builder: (BuildContext context) => errorDialog);
+  }
+
+  void showPopupDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String prefillJSONExample() {
+    Map<String, dynamic> student = {
+      "student_first_name": "<student_first_name>",
+      "student_last_name": "<student_last_name>",
+      "student_type": "EXISTING || NEW"
+    };
+
+    Map<String, dynamic> customer = {
+      "customer_first_name": "<customer_first_name>",
+      "customer_middle_name": "<customer_middle_name>",
+      "customer_last_name": "<customer_last_name>",
+      "customer_dob": "<customer_dob>",
+      "customer_gender": "MALE || FEMALE",
+      "customer_email": "<customer_email>",
+      "customer_marital_status": "MARRIED || DIVORCED || OTHERS"
+    };
+
+    Map<String, dynamic> kyc = {"pan_number": "<pan_number>"};
+
+    Map<String, dynamic> residential = {
+      "residential_addr_line_1": "<residential_addr_line_1>",
+      "residential_addr_line_2": "<residential_addr_line_2>",
+      "residential_type":
+          "SELF OWNED || RENTED || COMPANY PROVIDED || PAYING GUEST",
+      "residential_pincode": "<residential_pincode>",
+      "residential_city": "<residential_city>",
+      "residential_state": "<residential_state>"
+    };
+
+    Map<String, dynamic> employment = {
+      "income_type": "SALARIED || SELF EMPLOYED",
+      "employer_name": "<employer_name>",
+      "work_experience": "<work_experience>",
+      "net_monthly_salary": "<net_monthly_salary>",
+      "business_name": "<business_name>",
+      "business_annual_income": "<business_annual_income>",
+      "business_description": "<business_description>",
+      "years_of_current_business": "<years_of_current_business>",
+    };
+
+    Map<String, dynamic> notes = {
+      "roll_no": "Ixxxxxxxx5",
+      "admission_slno": 10000056,
+      "branch_id": 456
+    };
+
+    Map<String, dynamic> prefillJsonExample = {
+      "student_details": student,
+      "customer_details": customer,
+      "kyc_details": kyc,
+      "residential_details": residential,
+      "employment_details": employment,
+      "notes": notes
+    };
+
+    return prefillJsonExample.toString();
   }
 }

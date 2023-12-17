@@ -126,7 +126,7 @@ packages:
       path: "/Users/avinash/Flutter Project/gq_payment_flutter_sdk"
       relative: false
     source: path
-    version: "0.0.1"
+    version: "0.0.1-dev"
   http:
     dependency: transitive
     description:
