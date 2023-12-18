@@ -3,17 +3,19 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gq_payment_flutter_sdk/gq_payment_flutter_sdk.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
 }
-
+var globalContext;
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    globalContext = context;
     return MaterialApp(
       title: 'GrayQuest Payment Flutter SDK',
       theme: ThemeData(
@@ -160,13 +162,41 @@ class _MyHomePageState extends State<MyHomePage> {
 
     gqPaymentSDK.initiate(context, onSuccess: (data) {
       print('Success data: $data');
-      showPopupDialog(context, data.toString());
+      // showPopupDialog(context, data.toString());
+      Fluttertoast.showToast(
+          msg: data.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.black,
+          backgroundColor: Colors.white,
+          fontSize: 16.0
+      );
+      // Navigator.pop(context);
     }, onFailed: (data) {
       print('Failed data: $data');
-      showPopupDialog(context, data.toString());
+      // showPopupDialog(context, data.toString());
+      Fluttertoast.showToast(
+          msg: data.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.black,
+          backgroundColor: Colors.white,
+          fontSize: 16.0
+      );
     }, onCancel: (data) {
       print('Cancel data: $data');
-      showPopupDialog(context, data.toString());
+      Fluttertoast.showToast(
+          msg: data.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.black,
+          backgroundColor: Colors.white,
+          fontSize: 16.0
+      );
+      // showPopupDialog(globalContext, data.toString());
     });
 
     // This method is rerun every time setState is called, for instance as done
@@ -654,7 +684,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showPopupDialog(BuildContext context, String message) {
     showDialog(
-      context: context,
+      context: globalContext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Alert'),
