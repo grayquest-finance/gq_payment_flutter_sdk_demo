@@ -75,6 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _prefillObjController = TextEditingController();
 
   Map<String, dynamic> prefill = {};
+  Map<String, dynamic> pp_config = {};
+  Map<String, dynamic> fee_headers = {};
 
   String clientID = '';
   String secretKey = '';
@@ -106,13 +108,15 @@ class _MyHomePageState extends State<MyHomePage> {
         // //   "gq_api_key": "<KEY>"
         // };
 
-        Map<String, dynamic> customization = {
-          "fee_helper_text": "fee_helper_text",
-          "logo_url": "logo_url",
-          "theme_color": "252525"
-        };
+        // Map<String, dynamic> customization = {
+        //   "fee_helper_text": "fee_helper_text",
+        //   "logo_url": "logo_url",
+        //   "theme_color": "252525"
+        // };
 
-        Map<String, dynamic> pp_config = json.decode(ppConfig);
+        // if(ppConfig.isNotEmpty) {
+        //   pp_config = json.decode(ppConfig);
+        // }
 
         // Map<String, dynamic> pp_config = {
         //   "slug": "arjun-gile",
@@ -120,7 +124,9 @@ class _MyHomePageState extends State<MyHomePage> {
         //   // "slug": "kl-vijaywada",
         // };
 
-        Map<String, dynamic> fee_headers = json.decode(feeHeader);
+        // if(feeHeader.isNotEmpty) {
+        //   fee_headers = json.decode(feeHeader);
+        // }
 
         // Map<String, dynamic> fee_headers = {
         //   "Payable_fee_EMI": 150000,
@@ -133,10 +139,20 @@ class _MyHomePageState extends State<MyHomePage> {
           "student_id": studentID,
           if (customerNumber.isNotEmpty) "customer_number": customerNumber,
           "env": environment,
-          "customization": customization,
-          "pp_config": pp_config,
-          "fee_headers": fee_headers
+          // "customization": customization,
+          // "pp_config": pp_config,
+          // "fee_headers": fee_headers
         };
+
+        if(ppConfig.isNotEmpty) {
+          pp_config = json.decode(ppConfig);
+          configObj["pp_config"] = pp_config;
+        }
+
+        if(feeHeader.isNotEmpty) {
+          fee_headers = json.decode(feeHeader);
+          configObj["fee_headers"] = fee_headers;
+        }
 
         Map<String, dynamic> student_details = {
           "student_first_name": "First Name",
