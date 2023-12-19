@@ -124,10 +124,10 @@ packages:
     dependency: "direct main"
     description:
       name: gq_payment_flutter_sdk
-      sha256: "4aa9e99ebc9aef8864e30a7023229ae63b8ead6236ca3dbcdc7bae0e7b4f08a1"
+      sha256: "86b397ec1a45ae0a68664f64438b053084cdf65450bd6222257138f5496ccc59"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.3-dev"
+    version: "0.0.4-dev"
   http:
     dependency: transitive
     description:
