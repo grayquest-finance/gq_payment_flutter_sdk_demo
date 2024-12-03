@@ -52,7 +52,7 @@ post_install do |installer|
   end
 
   framework_paths = [
-    # "Pods/YourFramework/YourFramework/dynamic/YourFramework.xcframework/ios-arm64_armv7/YourFramework.framework/YourFramework",
+    # "Pods/YourFramework/YourFramework/dynamic/YourFramework.xcframework/ios-arm64_armv7/YourFramework.framework/YourFramework"
     "Pods/razorpay-pod/Pod/Razorpay.xcframework/ios-arm64/Razorpay.framework/Razorpay"
   ]
 
