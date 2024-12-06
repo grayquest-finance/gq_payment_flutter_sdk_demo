@@ -20,7 +20,7 @@ class HomeScreenController extends GetxController {
 
   RxString environment = ''.obs;
   String customerNumber = '';
-
+  Map<String, dynamic> prefill = {};
   String feeHeader = '';
   String prefillObj = '';
   final RxString data = "".obs;
@@ -36,6 +36,7 @@ class HomeScreenController extends GetxController {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: SizedBox(
+                width: 300,
                 child: Center(
                   child: Text(prefillJSONExample()),
                 ),
