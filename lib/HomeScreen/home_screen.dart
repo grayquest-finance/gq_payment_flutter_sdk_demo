@@ -139,7 +139,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                               onCancel: controller.handleCancel,
                               onFailed: controller.handleFailure,
                               onSuccess: controller.handleSuccess,
-                              jsonData: jsonEncode(controller.getConfig()),
+                              configData: jsonEncode(controller.getConfig()),
                               options: controller.prefillObjController.text);
                         },
                         child: const Text('Open GQ SDK'),
