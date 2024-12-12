@@ -35,7 +35,7 @@ The `client_id`, `client_secret_key`, and `gq_api_key` are used to get the acces
 GrayQuest provides two environments, one being the stage environment for developers to test the payment flow and responses and the other being live environment which gets shipped to production. This environment can be set in this client object.
 
 ```dart
-final Map<String, dynamic> clientObject = {
+final Map<String, dynamic> configObject = {
    "auth": {
       "client_id": "<client_id>",
       "client_secret_key": "<client_secret_key>",
@@ -126,7 +126,7 @@ Map<String, dynamic> prefillData = {
     print("OnSuccess: $value ");
   }
 
-final jsonData = jsonEncode(clientObject);
+final jsonData = jsonEncode(configObject);
 final prefill = jsonEncode(prefillData);
 
 gqPaymentSDK.checkout(
