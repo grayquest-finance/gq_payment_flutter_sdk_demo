@@ -123,6 +123,11 @@ class HomeScreen extends GetView<HomeScreenController> {
                       const InputDecoration(labelText: 'Prefill Object'),
                 ),
                 const SizedBox(height: 20),
+                TextField(
+                  controller: controller.referenceIdController,
+                  decoration: const InputDecoration(labelText: 'Reference ID'),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     const SizedBox(width: 16),
@@ -134,7 +139,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                               onCancel: controller.handleCancel,
                               onFailed: controller.handleFailure,
                               onSuccess: controller.handleSuccess,
-                              jsonData: jsonEncode(controller.getConfig()),
+                              configData: jsonEncode(controller.getConfig()),
                               options: controller.prefillObjController.text);
                         },
                         child: const Text('Open GQ SDK'),

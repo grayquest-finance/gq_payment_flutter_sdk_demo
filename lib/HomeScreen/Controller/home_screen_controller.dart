@@ -17,6 +17,7 @@ class HomeScreenController extends GetxController {
   final TextEditingController ppConfigController = TextEditingController();
   final TextEditingController feeHeaderController = TextEditingController();
   final TextEditingController prefillObjController = TextEditingController();
+  final TextEditingController referenceIdController = TextEditingController();
 
   RxString environment = ''.obs;
   String customerNumber = '';
@@ -343,7 +344,9 @@ class HomeScreenController extends GetxController {
         configObj["fee_headers"] = json.decode(feeHeaderController.text);
       }
 
-      print("configObj: ${configObj}");
+      if (referenceIdController.text.isNotEmpty) {
+        configObj["reference_id"] = referenceIdController.text;
+      }
 
       return configObj;
     } catch (e) {
