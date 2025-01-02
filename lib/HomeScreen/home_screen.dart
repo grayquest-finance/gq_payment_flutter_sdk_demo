@@ -124,8 +124,24 @@ class HomeScreen extends GetView<HomeScreenController> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
+                  controller: controller.customisationController,
+                  decoration:
+                      const InputDecoration(labelText: 'Customisation Object '),
+                ),
+                const SizedBox(height: 20),
+                TextField(
                   controller: controller.referenceIdController,
                   decoration: const InputDecoration(labelText: 'Reference ID'),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: controller.emiPlanIdController,
+                  decoration: const InputDecoration(labelText: 'EMI Plan ID'),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: controller.udfDetailsController,
+                  decoration: const InputDecoration(labelText: 'UDF Object '),
                 ),
                 const SizedBox(height: 20),
                 Row(

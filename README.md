@@ -54,6 +54,13 @@ final Map<String, dynamic> configObject = {
       "fee_type_2": "<fee_type_2>",
       "fee_type_n": "<fee_type_n>",
     },
+    "reference_id": "<reference_id>"
+    "emi_plan_id": "<emi_plan_id>"
+    "udf_details": {
+    "key_type_one": "<value_type_one>", 
+    "key_type_two": "<value_type_two>", 
+    "key_type_three": "<value_type_three>" 
+    }
   };
 
   Map<String, dynamic> studentDetails = {
@@ -149,7 +156,7 @@ gqPaymentSDK.checkout(
 | `onCancel` | Function | Callback when payment is cancelled | Optional |
 | `onFailed` | Function | Callback when payment fails | Optional |
 | `onSuccess` | Function | Callback when payment succeeds | Optional |
-| `jsonData` | String | Encoded configuration data | Yes |
+| `configData` | String | Encoded configuration data | Yes |
 | `options` | String | Encoded optional configuration data | Optional |
 
 ## Error Handling
