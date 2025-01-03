@@ -40,9 +40,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   get: ^4.6.6
-  smooth_page_indicator: ^1.2.0+3
-  animated_text_kit: ^4.2.2
-  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:
