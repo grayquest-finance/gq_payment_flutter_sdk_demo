@@ -45,5 +45,13 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>bhim</string>
+      <string>paytmmp</string>
+      <string>phonepe</string>
+      <string>tez</string>
+      <string>credpay</string>
+    </array>
 </dict>
 </plist>
