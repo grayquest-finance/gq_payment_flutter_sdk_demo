@@ -21,6 +21,9 @@ class HomeScreenController extends GetxController {
   final TextEditingController emiPlanIdController = TextEditingController();
   final TextEditingController udfDetailsController = TextEditingController();
   final TextEditingController customisationController = TextEditingController();
+  final TextEditingController paymentMethodController = TextEditingController();
+  final TextEditingController feeHeaderSplitController =
+      TextEditingController();
 
   RxString environment = ''.obs;
   String customerNumber = '';
@@ -361,6 +364,14 @@ class HomeScreenController extends GetxController {
       if (customisationController.text.isNotEmpty) {
         configObj["customization"] = jsonDecode(customisationController.text);
       }
+
+      if (paymentMethodController.text.isNotEmpty) {
+        configObj["payment_methods"] = jsonDecode(paymentMethodController.text);
+      }
+      if (feeHeaderSplitController.text.isNotEmpty) {
+        configObj["fee_headers_split"] =
+            jsonDecode(feeHeaderSplitController.text);
+      }
       return configObj;
     } catch (e) {
       print('Error decoding JSON: $e');
@@ -397,7 +408,9 @@ class HomeScreenController extends GetxController {
     secretKeyController.dispose();
     emiPlanIdController.dispose();
     udfDetailsController.dispose();
-    customisationController.dispose(); 
+    customisationController.dispose();
+    paymentMethodController.dispose();
+    feeHeaderSplitController.dispose(); 
     super.onClose();
   }
 }

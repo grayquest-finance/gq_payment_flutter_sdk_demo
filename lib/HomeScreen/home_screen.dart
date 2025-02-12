@@ -144,6 +144,18 @@ class HomeScreen extends GetView<HomeScreenController> {
                   decoration: const InputDecoration(labelText: 'UDF Object '),
                 ),
                 const SizedBox(height: 20),
+                TextField(
+                  controller: controller.paymentMethodController,
+                  decoration: const InputDecoration(
+                      labelText: 'payment methods (List)'),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: controller.feeHeaderSplitController,
+                  decoration: const InputDecoration(
+                      labelText: 'Fee headers split object '),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     const SizedBox(width: 16),
