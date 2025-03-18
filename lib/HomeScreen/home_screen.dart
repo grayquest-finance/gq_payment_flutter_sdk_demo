@@ -55,7 +55,7 @@ class HomeScreen extends GetView<HomeScreenController> {
                     ),
                     Expanded(
                       child: Obx(() => RadioListTile(
-                            value: 'staging',
+                            value: 'stage',
                             groupValue: controller.environment.value,
                             onChanged: (value) {
                               controller.environment.value = value!;
