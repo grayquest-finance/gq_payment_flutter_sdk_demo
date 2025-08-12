@@ -24,6 +24,7 @@ class HomeScreenController extends GetxController {
   final TextEditingController paymentMethodController = TextEditingController();
   final TextEditingController feeHeaderSplitController =
       TextEditingController();
+  final TextEditingController token = TextEditingController();
 
   RxString environment = ''.obs;
   String customerNumber = '';
@@ -31,6 +32,7 @@ class HomeScreenController extends GetxController {
   String feeHeader = '';
   String prefillObj = '';
   final RxString data = "".obs;
+  final List list = [];
 
   Map<String, dynamic>? getConfig() {
     try {
@@ -88,17 +90,21 @@ class HomeScreenController extends GetxController {
 
   handleSuccess(value) {
     data.value = value;
+
+    list.add(value);
     print("PSuccess: $value ");
   }
 
   handleFailure(value) {
     data.value = value;
     print("PFailed: $value ");
+    list.add(value);
   }
 
   handleCancel(value) {
     data.value = value;
     print("PCancel: $value ");
+    list.add(value);
   }
 
   @override

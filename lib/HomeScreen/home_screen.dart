@@ -156,6 +156,11 @@ class HomeScreen extends GetView<HomeScreenController> {
                       labelText: 'Fee headers split object '),
                 ),
                 const SizedBox(height: 20),
+                TextField(
+                  controller: controller.token,
+                  decoration: const InputDecoration(labelText: 'Token'),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     const SizedBox(width: 16),
@@ -176,6 +181,79 @@ class HomeScreen extends GetView<HomeScreenController> {
                     const SizedBox(width: 16.0),
                   ],
                 ),
+                const SizedBox(height: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(elevation: 2),
+                  onPressed: () {
+                    controller.gqPaymentSDK.checkoutWithToken(
+                        onCancel: controller.handleCancel,
+                        onFailed: controller.handleFailure,
+                        onSuccess: controller.handleSuccess,
+                        env: controller.environment.value,
+                        token: controller.token.text,
+                        context: context);
+                  },
+                  child: const Text('Open GQ SDK with Token'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(elevation: 2),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Callback Messages',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        content: SizedBox(
+                          width: double.maxFinite,
+                          height: 300,
+                          child: Column(
+                            children: [
+                              const Divider(thickness: 1),
+                              Expanded(
+                                child: ListView.separated(
+                                  itemCount: controller.list.isEmpty
+                                      ? 1
+                                      : controller.list.length,
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(height: 1),
+                                  itemBuilder: (context, index) => controller
+                                          .list.isEmpty
+                                      ? const Center(
+                                          child: Text("No message to show"))
+                                      : ListTile(
+                                          leading: Text((index + 1).toString()),
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 4),
+                                          title: Text(
+                                            controller.list[index],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                          visualDensity: VisualDensity.compact,
+                                        ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Close'),
+                          ),
+                        ],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                    );
+                  },
+                  child: const Text('See Callback Messages',
+                      style: TextStyle(fontSize: 16)),
+                ),
+                // const SizedBox(height: 20),
                 Obx(
                   () => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
