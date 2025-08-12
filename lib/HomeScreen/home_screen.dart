@@ -174,16 +174,6 @@ class HomeScreen extends GetView<HomeScreenController> {
                       ),
                     ),
                     const SizedBox(width: 16.0),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(elevation: 2),
-                        onPressed: () {
-                          controller.customDialog();
-                        },
-                        child: const Text('Prefill'),
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
                   ],
                 ),
                 Obx(
