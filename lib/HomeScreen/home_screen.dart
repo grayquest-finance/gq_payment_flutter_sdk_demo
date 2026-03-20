@@ -185,13 +185,14 @@ class HomeScreen extends GetView<HomeScreenController> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(elevation: 2),
                   onPressed: () {
-                    controller.gqPaymentSDK.checkoutWithToken(
-                        onCancel: controller.handleCancel,
-                        onFailed: controller.handleFailure,
-                        onSuccess: controller.handleSuccess,
-                        env: controller.environment.value,
-                        token: controller.token.text,
-                        context: context);
+                    controller.gqPaymentSDK.tokenCheckout(
+                      context,
+                      onCancel: controller.handleCancel,
+                      onFailed: controller.handleFailure,
+                      onSuccess: controller.handleSuccess,
+                      env: controller.environment.value,
+                      token: controller.token.text,
+                    );
                   },
                   child: const Text('Open GQ SDK with Token'),
                 ),
