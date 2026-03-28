@@ -21,11 +21,15 @@ PODS:
     - OrderedSet (~> 6.0.3)
   - fluttertoast (0.0.2):
     - Flutter
+    - Toast
   - OrderedSet (6.0.3)
-  - razorpay-pod (1.4.2)
+  - razorpay-core-pod (1.0.6)
+  - razorpay-pod (1.5.3):
+    - razorpay-core-pod (= 1.0.6)
   - razorpay_flutter (1.1.10):
     - Flutter
     - razorpay-pod
+  - Toast (4.1.1)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -42,7 +46,9 @@ SPEC REPOS:
     - CashfreePGUISDK
     - CFNetworkSDK
     - OrderedSet
+    - razorpay-core-pod
     - razorpay-pod
+    - Toast
 
 EXTERNAL SOURCES:
   Flutter:
@@ -62,14 +68,16 @@ SPEC CHECKSUMS:
   CashfreePGCoreSDK: 133e1ba5aeb8a89bf2188eb3312c88fcad084c75
   CashfreePGUISDK: 5e943fcca20c45b66c9837bbb87ebbfb75c013a5
   CFNetworkSDK: 4e431b55f607544f5ca45bc1a36a13e602f51841
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_cashfree_pg_sdk: acd52fb06332c1d2e58fc1df08435ce34b46fb25
   flutter_inappwebview_ios: 6f63631e2c62a7c350263b13fa5427aedefe81d4
-  fluttertoast: 21eecd6935e7064cc1fcb733a4c5a428f3f24f0f
+  fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
-  razorpay-pod: 77bdd9733b6ea81c9fbbd6b75fea6a09feab284e
+  razorpay-core-pod: 6da5fb4ed280279d665507fdb50e213d793a5fe2
+  razorpay-pod: 4385cf844aa29389313b741e20c72fe668970d49
   razorpay_flutter: 84b3bfd206ae9c9c2a9ba585524a1b3d8102b6c1
+  Toast: 1f5ea13423a1e6674c4abdac5be53587ae481c4e
 
-PODFILE CHECKSUM: 6b4fb95951ba95a810b599921c103483280051de
+PODFILE CHECKSUM: 0a6a946fb8163945458adf3fec2e2a5d3887d9cb
 
 COCOAPODS: 1.16.2

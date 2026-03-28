@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:gq_payment_flutter_sdk_demo/HomeScreen/Controller/home_screen_controller.dart';
 
@@ -161,6 +161,16 @@ class HomeScreen extends GetView<HomeScreenController> {
                   decoration: const InputDecoration(labelText: 'Token'),
                 ),
                 const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(elevation: 2),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const WebViewScreen(),
+                    ));
+                  },
+                  child: const Text('Webview'),
+                ),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     const SizedBox(width: 16),
@@ -265,5 +275,140 @@ class HomeScreen extends GetView<HomeScreenController> {
             ),
           ),
         ));
+  }
+}
+
+class WebViewScreen extends StatefulWidget {
+  const WebViewScreen({super.key});
+
+  @override
+  State<WebViewScreen> createState() => _WebViewScreenState();
+}
+
+class _WebViewScreenState extends State<WebViewScreen> {
+  final TextEditingController controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller.text = "";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          spacing: 20,
+          children: [
+            TextField(
+              controller: controller,
+              decoration: const InputDecoration(labelText: 'ENTER URL'),
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Webviews(
+                      url: controller.text,
+                    ),
+                  ));
+                },
+                child: const Text("Open Webview"))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Webviews extends StatefulWidget {
+  final String url;
+  const Webviews({super.key, required this.url});
+
+  @override
+  State<Webviews> createState() => _WebviewsState();
+}
+
+class _WebviewsState extends State<Webviews> {
+  @override
+  void initState() {
+    super.initState();
+    PlatformInAppWebViewController.debugLoggingSettings.enabled = true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: InAppWebView(
+        initialSettings: InAppWebViewSettings(
+          isInspectable: true,
+          javaScriptCanOpenWindowsAutomatically: true,
+          javaScriptEnabled: true,
+          supportMultipleWindows: true,
+          allowFileAccess: true,
+          allowFileAccessFromFileURLs: true,
+          allowContentAccess: true,
+        ),
+        initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+        onLoadStop: (controller, url) {
+          setState(() {});
+        },
+        onCreateWindow: (controller, createWindowAction) async {
+          // create a headless WebView using the createWindowAction.windowId to get the correct URL
+          HeadlessInAppWebView? headlessWebView;
+          headlessWebView = HeadlessInAppWebView(
+            windowId: createWindowAction.windowId,
+            onLoadStart: (controller, url) async {
+              // print("URL inside Create Window: $url");
+              if (url != null) {
+                InAppBrowser.openWithSystemBrowser(
+                    url: url); // to open with the system browser
+                // or use the https://pub.dev/packages/url_launcher plugin
+              }
+              // dispose it immediately
+              await headlessWebView?.dispose();
+              headlessWebView = null;
+            },
+          );
+          headlessWebView?.run();
+
+          // return true to tell that we are handling the new window creation action
+          return true;
+        },
+        onUpdateVisitedHistory: (controller, url, isReload) {
+          print("UPDATED URLS: $url");
+        },
+        onCloseWindow: (controller) {
+          print("window closing");
+        },
+        shouldOverrideUrlLoading: (controller, navigationAction) async {
+          print("NAvigationsURL: ${navigationAction.request.url}");
+
+          final Set<String> schemes = {'http', 'https', 'about'};
+          // final hasValidScheme =
+          //     Environment.checkUrlScheme(navigationAction.request.url?.scheme);
+
+          if (!schemes.contains(navigationAction.request.url?.scheme)) {
+            try {
+              InAppBrowser.openWithSystemBrowser(
+                  url: navigationAction.request.url!);
+              return NavigationActionPolicy.CANCEL;
+            } catch (e) {
+              // print('Error launching UPI app: $e');
+            }
+          }
+          return NavigationActionPolicy.ALLOW;
+        },
+      ),
+    );
   }
 }
